@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     // Función para obtener la próxima pregunta desde el servidor FastAPI
     function obtenerPregunta() {
-        $.get('http://125.156.156.20:8000/get_question', function(data) {
+        $.get('http://localhost:8000/get_question', function(data) {
             if (data.question) {
                 preguntaID = data.pregunta_id;
                 $('#preguntaTitulo').text('Pregunta:');
@@ -24,7 +24,7 @@ $(document).ready(function() {
             var respuestaJSON = { "pregunta_id": preguntaID, "answer": respuesta }; // Envía el ID de la pregunta
             console.log(respuestaJSON);
             contador ++;
-            $.post('http://125.156.156.20:8000/submit_answer', respuestaJSON, function(data) {
+            $.post('http://localhost:8000/submit_answer', respuestaJSON, function(data) {
                 if (contador==15){
                     $('#preguntaSection').hide();
                     // Manejar la respuesta del servidor, si es necesario
@@ -62,7 +62,7 @@ $(document).ready(function() {
 
         // Función para reiniciar la API
     function reiniciarAPI() {
-        $.post('http://125.156.156.20:8000/reset_api', function(data) {
+        $.post('http://localhost:8000/reset_api', function(data) {
             if (data.message) {
                 $('#nombreInput').val(''); // Limpiar el campo de entrada de nombre
                 nombre = ''; // Vaciar la variable nombre
