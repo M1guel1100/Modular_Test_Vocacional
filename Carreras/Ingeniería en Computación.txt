@@ -1,0 +1,18 @@
+Perfil de egreso:
+
+Que el egresado de Ingeniería en Computación tendrá los conocimientos en las áreas algoritmos de computación, de diseño de software, de arquitectura de computadoras y de redes que integran paradigmas modernos de cómputo y tecnologías emergentes, con la capacidad de:
+
+Aplicar los principios matemáticos y técnicas básicas de la programación paralela, concurrente, distribuida y de tiempo real, para el desarrollo de un sistema de software.
+
+Diseñar sistemas de software y de información, implementando arquitecturas, infraestructuras y características de seguridad, para dar solución a problemáticas reales.
+
+Aplicar diversas arquitecturas de computadoras, para implementar soluciones integrales en sistemas computacionales.
+Implementar tecnologías de redes de computadoras, funcionalidades y estructuras para diseñar e integrar aplicaciones basadas en ellas.
+
+Se formará con ética y responsabilidad, en búsqueda de la calidad y la innovación tecnológica en las organizaciones. Podrá trabajar en equipo, con liderazgo y una visión emprendedora para aportar soluciones de ingeniería en los contextos global, económico, sustentable y social.
+
+Campo laboral:
+
+El egresado podrá desarrollarse en el sector público y privado o emprender su propia empresa en los campos relacionados con el desarrollo de software.
+
+Asimismo, con el creciente uso generalizado de los sistemas de cómputo en la actualidad, ha aumentado la demanda de estos profesionistas con un conocimiento que pueda ser aplicado en diferentes áreas como la industria, la empresa, la educación y las telecomunicaciones; además en las diferentes ramas de la ingeniería para la realización de las más variadas aplicaciones.

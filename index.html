@@ -37,11 +37,11 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 text-center">
                 <div class="descriptions-item">
-                    <p>Te damos la bienvenida a nuestro test vocacional donde intentaremos porporcionarte una idea de que carrera puedes elegir acorde a tus intereses.
-                        Sabemos que el proceso de selección de carrera es un paso fundamental en la vida de cada estudiante, y entendemos lo dificil que puede ser 
-                        al tener tantas opciones como las que nos ofrece la Universidad de Guadalajara, es por eso que estamos comprometidos a ofrecerte una opción parta facilitarte dicho proceso con ayuda de inteligencia Artificial,
-                        valorando tus respuestas y dandote la opción más óptima de acuerdo a tus gustos.
-                        !EXPLORA, APRENDE Y CREA UN CAMINO PROFESIONAL QUE INSPIRE!
+                    <p>Te damos la bienvenida a nuestro test vocacional donde intentaremos proporcionarte una idea de qué carrera puedes elegir acorde a tus intereses.
+                        Sabemos que el proceso de selección de carrera es un paso fundamental en la vida de cada estudiante, y entendemos lo difícil que puede ser 
+                        al tener tantas opciones como las que nos ofrece la Universidad de Guadalajara, es por eso que estamos comprometidos a ofrecerte una opción para facilitarte dicho proceso con ayuda de inteligencia Artificial,
+                        valorando tus respuestas y dándote la opción más óptima de acuerdo a tus gustos.
+                        ¡EXPLORA, APRENDE Y CREA UN CAMINO PROFESIONAL QUE INSPIRE!
                     </p>
                 </div>
             </div>
@@ -105,47 +105,29 @@
     </div>
 </div>
 
-<div id="preguntasSection" class="blurb" style="display: none;">
+
+<div id="preguntaSection" class="blurb" style="display: none;">
     <div class="container text-center">
         <div class="row">
             <div class="col-md-12">
                 <h2 id="preguntaTitulo"></h2>
                 <p id="preguntaTexto"></p>
-                <button class="btn btn-default" id="siButton">Sí</button>
-                <button class="btn btn-default" id="noButton">No</button>
-                <!--MENSAJE DE FINALIZACION-->
-                <div id="finalizacion" style="display: none; text-align: center; font-size: 24px; background-color: #f2f2f2; padding: 20px;">
-                    <p>MUY BIEN <span id="nombreFinalizacion"></span>, ¡HAZ TERMINADO EL TEST!</p>
-                    <p class="recomendacion-title">ESTA ES LA CARRERA QUE TE RECOMENDAMOS:</p>
-                    <p class="carrera">INGENIERIA EN COMPUTACIÓN</p>
-                    <p class="universidad">CENTRO UNIVERSITARIO: CUCEI</p>
-                    <div class="logos">
-                        <img src="/data/Escudo_CUCEI.png" alt="Logo del Centro" class="logo">
-                        <img src="/data/UDG_LOGO.png" alt="Logo de la UDG" class="logo">
-                    </div>
-                    <div class="recuadro">
-                        <div class="titulo">Perfil del egresado:</div>
-                        <p class="descripcion">
-                            Que el egresado de Ingeniería en Computación tendrá los conocimientos en las áreas algoritmos de computación, de diseño de software, de arquitectura de computadoras y de redes que integran paradigmas modernos de cómputo y tecnologías emergentes, con la capacidad de:<br>
-
-                            <br>-Aplicar los principios matemáticos y técnicas básicas de la programación paralela, concurrente, distribuida y de tiempo real, para el desarrollo de un sistema de software.
-                            <br>-Diseñar sistemas de software y de información, implementando arquitecturas, infraestructuras y características de seguridad, para dar solución a problemáticas reales.
-                            <br>-Aplicar diversas arquitecturas de computadoras, para implementar soluciones integrales en sistemas computacionales.
-                            <br>-Implementar tecnologías de redes de computadoras, funcionalidades y estructuras para diseñar e integrar aplicaciones basadas en ellas.
-                            <br>-Se formará con ética y responsabilidad, en búsqueda de la calidad y la innovación tecnológica en las organizaciones. Podrá trabajar en equipo, con liderazgo y una visión emprendedora para aportar soluciones de ingeniería en los contextos global, económico, sustentable y social.
-                        </p>
-                    </div>
-                    <div class="recuadro">
-                        <div class="titulo">Campo laboral:</div>
-                        <p class="descripcion">
-                            -El egresado podrá desarrollarse en el sector público y privado o emprender su propia empresa en los campos relacionados con el desarrollo de software.<br>
-                            Asimismo, con el creciente uso generalizado de los sistemas de cómputo en la actualidad, ha aumentado la demanda de estos profesionistas con un conocimiento que pueda ser aplicado en diferentes áreas como la industria, la empresa, la educación y las telecomunicaciones; además en las diferentes ramas de la ingeniería para la realización de las más variadas aplicaciones..
-                        </p>
-                    </div>
-                </div>                
-                <!--MENSAJE DE FINALIZACION-->
+                <button id="submitSI" class="btn btn-default">Sí</button>
+                <button id="submitNO" class="btn btn-default">NO</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="resultadoSection" style="display: none;">
+    <div class="container text-center">
+    <h1><span id="nombreUsuario"></span></h1>
+    <h2>Esta es tu carrera recomendada: </h2>
+    <h2><p id="resultadoCarrera"></p></h2>
+    <div id="centrosRelacionados">
+    </div>
+    <div id="contenidoCarrera"></div>
+    <button id="resetButton" class="btn-sm btn-default btn-lg">HACER OTRO TEST</button>
     </div>
 </div>
 
@@ -180,10 +162,12 @@
 <script src="vendor/angular/angular.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/scripts.js"></script>
 <script src="vendor/bootstrapDialog/bootstrap-dialog.min.js"></script>
 <script src="vendor/angular-chart/angular-chart.min.js"></script>
 <script src="vendor/angular-tooltip/angular-tooltips.min.js"></script>
+<script src="js/scripts.js"></script>
+
 </body>
 </html>
-

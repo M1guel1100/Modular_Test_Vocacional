@@ -11,6 +11,17 @@ body {
   font-family:Arial,sans-serif;
 }
 
+.highlight {
+  color: black; /* Cambia el color del texto a rojo */
+  font-size: 24px; /* Tamaño de fuente más grande */
+  display: flex; /* Usa un modelo de caja flexible */
+  align-items: center; /* Centra verticalmente el contenido */
+}
+
+.center-image {
+  max-width: 100px;
+  max-height: 100px;
+}
 /* fix bs3 horizontal scrollbar bug */
 .row { margin: 0; padding: 0 }
 

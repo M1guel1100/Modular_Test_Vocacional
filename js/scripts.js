@@ -1,71 +1,133 @@
 $(document).ready(function() {
-    var testStarted = false;
-    var currentQuestion = 0;
-    var preguntas = [
-        { texto: 'Pregunta 1: ¿Te interesa colaborar en equipos para realizar proyectos específicos?' },
-        { texto: 'Pregunta 2: ¿Te apasiona el apoyar a las demás personas en sus problemas comunes?' },
-        { texto: 'Pregunta 3: ¿Te gustaría analizar las estructuras de edificaciones y construcciones modernas?  ' },
-        { texto: 'Pregunta 4: ¿Te agradaría entrar en el mundo gastronómico y aprender más sobre alimentos?' },
-        { texto: 'Pregunta 5: ¿Te gusta la interacción social e informar sobre temas de interés?' },
-        { texto: 'Pregunta 6: ¿Tienes curiosidad acerca de cómo funcionan los sistemas informáticos y tecnológicos?' },
-        { texto: 'Pregunta 7: ¿Te atrae la idea de contribuir al diseño y desarrollo de tecnologías?' },
-        { texto: 'Pregunta 8: ¿Te atrae la idea de trabajar en la investigación científica y tecnológica?' },
-        { texto: 'Pregunta 9: ¿Te interesa conocer mas a fondo los dispositivos computacionales actuales?' },
-        { texto: 'Pregunta 10: ¿Te causa intriga el como funcionan las aplicaciones que usas día con día, como Facebook, Whatsapp,et c?' }
-    ];
+    // VARIABLES GLOBALES
+    var nombre = "";
+    var contador = 0;
+    var preguntaID = null;
 
-    function startTest() {
-        testStarted = true;
-        $('#startButton').hide();
-        $('#nombreSection').show();
+
+    // Función para obtener la próxima pregunta desde el servidor FastAPI
+    function obtenerPregunta() {
+        $.get('http://localhost:8000/get_question', function(data) {
+            if (data.question) {
+                preguntaID = data.pregunta_id;
+                $('#preguntaTitulo').text('Pregunta:');
+                $('#preguntaTexto').text(data.question);
+                $('#preguntaSection').show();
+            } else if (data.detail) {
+                alert(data.detail);  // Manejar errores si es necesario
+            }
+        });
     }
 
-    function submitNombre() {
-        var nombre = $('#nombreInput').val();
-        console.log('Nombre:', nombre);
-        $('#nombreSection').hide();
-        $('#nombreFinalizacion').text(nombre);  // Actualiza el contenido del span con el nombre
-        mostrarPregunta(currentQuestion);
-    }
-
-    function mostrarPregunta(index) {
-        if (index < preguntas.length) {
-            $('#preguntaTitulo').text('Pregunta ' + (index + 1));
-            $('#preguntaTexto').text(preguntas[index].texto);
-            $('#preguntasSection #finalizacion').hide();
-            $('#preguntaTexto').show();  // Mostrar solo el texto de la pregunta
-            $('#siButton').show();
-            $('#noButton').show();
-            $('#preguntasSection').show();
-        } else {
-            $('#preguntaTexto').hide();  // Ocultar el texto de la pregunta
-            $('#preguntaTitulo').hide(); // Ocultar el título de la pregunta
-            $('#siButton').hide();
-            $('#noButton').hide();
-            $('#preguntasSection').show();
-            $('#preguntasSection #finalizacion').show();  // Mostrar la sección de finalización
+        // Función para enviar la respuesta al servidor FastAPI
+        function responderPregunta(respuesta) {
+            var respuestaJSON = { "pregunta_id": preguntaID, "answer": respuesta }; // Envía el ID de la pregunta
+            console.log(respuestaJSON);
+            contador ++;
+            $.post('http://localhost:8000/submit_answer', respuestaJSON, function(data) {
+                if (contador==15){
+                    $('#preguntaSection').hide();
+                    // Manejar la respuesta del servidor, si es necesario
+                if (data.message) {
+                    console.log(data.message);
+                    if (data.recommended_career) {
+                        $('#resultadoCarrera').text(data.recommended_career);
+                        /// Mostrar las imágenes de los centros relacionados
+                        var centrosRelacionadosDiv = $('#centrosRelacionados');
+                        centrosRelacionadosDiv.empty(); // Limpiar cualquier contenido anterior
+                        // Cargar y mostrar el contenido del archivo de texto correspondiente
+                        var nombreArchivo = data.recommended_career + '.txt';
+                        cargarYMostrarContenido(nombreArchivo);
+    
+                        data.related_centers.forEach(function(center) {
+                            // Supongamos que los nombres de las imágenes coinciden con los nombres de los centros
+                            var imgSrc = 'Centros/' + center + '.png'; // Ajusta la ruta de la imagen según tu estructura
+    
+                            // Crea un elemento <img> y agrégalo al div
+                            var imgElement = $('<img>').attr('src', imgSrc).addClass('center-image').attr('style', 'max-width: 100px; max-height: 100px;');
+                            centrosRelacionadosDiv.append(imgElement);
+                        });
+                        
+                        // Mostrar la sección de resultado
+                        $('#resultadoSection').show();
+                    }
+                }
+                }
+                else{
+                    // Obtener la siguiente pregunta o recomendación
+                    obtenerPregunta();
+                }
+            });
         }
-    }
 
-    function siguientePregunta() {
-        currentQuestion++;
-        mostrarPregunta(currentQuestion);
-    }
-
-    $('#startButton').click(startTest);
-    $('#submitNombreButton').click(submitNombre);
-    $('#siButton').click(siguientePregunta);
-    $('#noButton').click(siguientePregunta);
-
-    $('#nombreSection').hide();
-    $('#preguntasSection').hide();
-
-    $('.scroll-top').click(function(){
-        $('body,html').animate({scrollTop:0},800);
+        // Función para reiniciar la API
+    function reiniciarAPI() {
+        $.post('http://localhost:8000/reset_api', function(data) {
+            if (data.message) {
+                $('#nombreInput').val(''); // Limpiar el campo de entrada de nombre
+                nombre = ''; // Vaciar la variable nombre
+                $('#nombreUsuario').text('');
+                $('#nombreSection').show();
+                $('#preguntaSection').hide();
+                $('#resultadoSection').hide();
+                contador = 0;
+                preguntaID = null;
+            }
+        });
+}
+    $('#resetButton').off('click').on('click', function() {
+        location.reload();
+    });
+    
+    // Detectar cuando la página se recarga o se cierra
+    $(window).on('beforeunload', function() {
+        reiniciarAPI();
     });
 
-    $('.scroll-down').click(function(){
-        $('body,html').animate({scrollTop:$(window).scrollTop()+800},1000);
+    
+
+    //Funcion para mostrar carrera
+    function cargarYMostrarContenido(nombreArchivo) {
+        $.get('carreras/' + nombreArchivo, function(data) {
+            $('#contenidoCarrera').text(data); // Supongamos que tienes un elemento de texto con id "contenidoCarrera" donde mostrar el contenido.
+            resaltarTextoCarrera();
+        });
+    }
+
+    //Funcion para resaltar txt
+    function resaltarTextoCarrera() {
+        var contenidoCarrera = $('#contenidoCarrera').html();
+        contenidoCarrera = contenidoCarrera.replace(/(Perfil de egreso:)/g, '<span class="highlight" style="display: flex; align-items: center; justify-content: center;">$1</span>');
+        contenidoCarrera = contenidoCarrera.replace(/(Campo laboral:)/g, '<span class="highlight" style="display: flex; align-items: center; justify-content: center;">$1</span>');
+        $('#contenidoCarrera').html(contenidoCarrera);
+    }
+    
+    // Cuando se hace clic en "Empezar Test"
+    $('#startButton').off('click').on('click', function() {
+        $('#nombreSection').show();
+        $(this).hide();
     });
 
+    // Cuando se hace clic en "LISTO" para enviar el nombre
+    $('#submitNombreButton').off('click').on('click', function() {
+        nombre = $('#nombreInput').val().trim();
+        if (nombre === '') {
+            alert('Por favor, ingresa tu nombre.');
+        } else {
+            $('#nombreUsuario').text(nombre);  // Establecer el nombre del usuario
+            $('#nombreSection').hide();
+            obtenerPregunta();
+        }
+    });
+
+
+    // Cuando se hace clic en "Sí"
+    $('#submitSI').off('click').on('click', function() {
+        responderPregunta(1);
+    });
+
+    // Cuando se hace clic en "No"
+    $('#submitNO').off('click').on('click', function() {
+        responderPregunta(0);
+    });
 });
