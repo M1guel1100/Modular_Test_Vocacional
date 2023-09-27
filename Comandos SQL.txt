@@ -1,0 +1,270 @@
+TABLAS SQL:
+
+CREATE TABLE public.carreras
+(
+    "CarreraID" serial PRIMARY KEY,
+    "NombreCarrera" VARCHAR(255) NOT NULL,
+    "CentrosRelacionados" VARCHAR(255)[] -- Array de nombres de centros relacionados
+);
+
+
+
+CREATE TABLE public.preguntas
+(
+    "PreguntaID" serial PRIMARY KEY,
+    "TextoPregunta" TEXT NOT NULL
+);
+
+
+
+CREATE TABLE public.preguntas_carreras
+(
+    "ID" serial PRIMARY KEY,
+    "PreguntaID" integer REFERENCES public.preguntas ("PreguntaID"),
+    "CarreraID" integer REFERENCES public.carreras ("CarreraID")
+);
+
+
+CREATE TABLE public.usuarios
+(
+    "UsuarioID" serial PRIMARY KEY,
+    "NombreUsuario" VARCHAR(255) NOT NULL,
+    "CarreraRecomendada" integer, -- ID de la carrera recomendada
+    "SegundaCarrera" integer, -- ID de la segunda carrera más afín
+    "TerceraCarrera" integer, -- ID de la tercera carrera más afín
+    FOREIGN KEY ("CarreraRecomendada") REFERENCES public.carreras ("CarreraID"),
+    FOREIGN KEY ("SegundaCarrera") REFERENCES public.carreras ("CarreraID"),
+    FOREIGN KEY ("TerceraCarrera") REFERENCES public.carreras ("CarreraID")
+);
+
+
+CREATE TABLE public.respuestas_usuarios
+(
+    "RespuestaID" serial PRIMARY KEY,
+    "UsuarioID" integer NOT NULL,
+    "PreguntaID" integer NOT NULL,
+    "Respuesta" VARCHAR(10) NOT NULL, -- Puede ser 'Sí', 'No', u otras respuestas
+    FOREIGN KEY ("PreguntaID") REFERENCES public.preguntas ("PreguntaID"),
+    FOREIGN KEY ("UsuarioID") REFERENCES public.usuarios ("UsuarioID")
+);
+
+
+// INSERCIÓN DE DATOS//
+
+CARRERAS:
+-- Insertar Carreras y Centros Relacionados en la Tabla Carreras
+INSERT INTO public.carreras ("NombreCarrera", "CentrosRelacionados") VALUES
+    ('Licenciatura en Ciencias de la Comunicación', ARRAY['CUCSH', 'CUCosta', 'CUTonalá']),
+    ('Licenciatura en Psicología', ARRAY['CUCSH', 'CULagos', 'CUTonalá']),
+    ('Licenciatura en Derecho', ARRAY['CUCSH', 'CUCosta', 'CUTonalá', 'CULagos', 'CUCEA', 'CUCBA']),
+    ('Licenciatura en Sociología', ARRAY['CUCSH']),
+    ('Licenciatura en Periodismo', ARRAY['CUCSH']),
+    ('Licenciatura en Letras Hispánicas', ARRAY['CUCSH']),
+    ('Licenciatura en Antropología', ARRAY['CUCSH']),
+    ('Licenciatura en Relaciones Internacionales', ARRAY['CUCSH']),
+    ('Licenciatura en Ciencias Políticas', ARRAY['CUCSH']),
+    ('Licenciatura en Historia', ARRAY['CUCSH']),
+    ('Diseño Gráfico', ARRAY['CUAAD']),
+    ('Arquitectura', ARRAY['CUAAD', 'CUCosta']),
+    ('Diseño de Modas', ARRAY['CUAAD', 'CUCosta', 'CUALTOS']),
+    ('Diseño Industrial', ARRAY['CUAAD']),
+    ('Animación y Arte Digital', ARRAY['CUAAD']),
+    ('Artes Visuales', ARRAY['CUAAD']),
+    ('Diseño de Interiores', ARRAY['CUAAD']),
+    ('Diseño de Joyería', ARRAY['CUAAD']),
+    ('Diseño de Escenografía', ARRAY['CUAAD']),
+    ('Historia del Arte', ARRAY['CUAAD']),
+    ('Licenciatura en Administración', ARRAY['CUCEA']),
+    ('Licenciatura en Contaduría Pública', ARRAY['CUCEA', 'CUCosta', 'CUCBA', 'CULagos']),
+    ('Licenciatura en Mercadotecnia', ARRAY['CUCEA']),
+    ('Licenciatura en Negocios Internacionales', ARRAY['CUCEA', 'CUCosta', 'CUALTOS']),
+    ('Licenciatura en Economía', ARRAY['CUCEA']),
+    ('Licenciatura en Finanzas', ARRAY['CUCEA']),
+    ('Licenciatura en Recursos Humanos', ARRAY['CUCEA']),
+    ('Licenciatura en Comercio Internacional', ARRAY['CUCEA', 'CUCosta', 'CUALTOS', 'CURNorte']),
+    ('Licenciatura en Publicidad y Relaciones Públicas', ARRAY['CUCEA']),
+    ('Licenciatura en Gestión de Tecnologías de Información', ARRAY['CUCEA']),
+    ('Ingeniería en Computación', ARRAY['CUCEI']),
+    ('Ingeniería en Electrónica', ARRAY['CUCEI']),
+    ('Ingeniería en Mecatrónica', ARRAY['CUCEI']),
+    ('Ingeniería en Informática', ARRAY['CUCEI']),
+    ('Ingeniería en Sistemas Computacionales', ARRAY['CUCEI']),
+    ('Ingeniería Industrial', ARRAY['CUCEI']),
+    ('Ingeniería Civil', ARRAY['CUCEI']),
+    ('Ingeniería en Alimentos', ARRAY['CUCEI']),
+    ('Ingeniería Química', ARRAY['CUCEI']),
+    ('Ingeniería en Energías Renovables', ARRAY['CUCEI']),
+    ('Medicina', ARRAY['CUCS']),
+    ('Enfermería', ARRAY['CUCS', 'CUALTOS', 'CURNorte']),
+    ('Nutrición', ARRAY['CUCS']),
+    ('Cirujano Dentista', ARRAY['CUCS']),
+    ('Terapia Física', ARRAY['CUCS']),
+    ('Terapia Ocupacional', ARRAY['CUCS']),
+    ('Terapia Respiratoria', ARRAY['CUCS']),
+    ('Terapia en Comunicación Humana', ARRAY['CUCS']),
+    ('Fisioterapia', ARRAY['CUCS']),
+    ('Licenciatura en Gastronomía', ARRAY['CUCosta', 'CUCBA']),
+    ('Licenciatura en Administración Pública', ARRAY['CUCosta', 'CUTonalá']),
+    ('Licenciatura en Turismo', ARRAY['CUCosta']),
+    ('Licenciatura en Diseño de Modas', ARRAY['CUCosta', 'CUALTOS']),
+    ('Licenciatura en Arquitectura', ARRAY['CUCosta', 'CUALTOS']),
+    ('Licenciatura en Ciencias Ambientales', ARRAY['CUCosta']),
+    ('Licenciatura en Negocios Internacionales', ARRAY['CUCosta']),
+    ('Licenciatura en Ciencias de la Comunicación', ARRAY['CUCosta', 'CUTonalá']),
+    ('Licenciatura en Contaduría Pública', ARRAY['CUCosta']),
+    ('Licenciatura en Ciencias de la Educación', ARRAY['CUTonalá']),
+    ('Licenciatura en Diseño para la Comunicación Gráfica', ARRAY['CUTonalá']),
+    ('Licenciatura en Ciencias Sociales', ARRAY['CUTonalá']),
+    ('Licenciatura en Medicina Veterinaria y Zootecnia', ARRAY['CUALTOS']),
+    ('Licenciatura en Pedagogía', ARRAY['CUALTOS']),
+    ('Licenciatura en Ingeniería en Agronegocios', ARRAY['CULagos']),
+    ('Licenciatura en Administración Financiera', ARRAY['CULagos']),
+    ('Licenciatura en Ingeniería Ambiental y de Recursos Naturales', ARRAY['CULagos']),
+    ('Licenciatura en Agroindustrias', ARRAY['CURNorte']),
+    ('Licenciatura en Sistemas Computacionales', ARRAY['CURNorte']),
+    ('Licenciatura en Psicología', ARRAY['CURNorte']),
+    ('Licenciatura en Nutrición', ARRAY['CURNorte']),
+    ('Licenciatura en Tecnología de los Alimentos', ARRAY['CURNorte']),
+    ('Licenciatura en Acuicultura', ARRAY['CURNorte']),
+    ('Licenciatura en Diseño de Modas', ARRAY['CULagos']),
+    ('Licenciatura en Administración de Empresas', ARRAY['CUALTOS']),
+    ('Licenciatura en Medicina Veterinaria y Zootecnia', ARRAY['CUALTOS']),
+    ('Licenciatura en Ciencia de los Alimentos', ARRAY['CUCBA']),
+    ('Licenciatura en Diseño de Modas', ARRAY['CULagos']),
+    ('Licenciatura en Administración Pública', ARRAY['CUCosta']),
+    ('Licenciatura en Ciencias Sociales', ARRAY['CURNorte'])
+    ;
+
+
+//PREGUNTAS//
+INSERT INTO public.preguntas ("TextoPregunta") VALUES
+    ('¿Te interesa el estudio y análisis de la sociedad y sus comportamientos?'),
+    ('¿Tienes habilidades para comunicarte efectivamente con diferentes audiencias?'),
+    ('¿Eres curioso acerca de cómo funcionan las economías y los mercados?'),
+    ('¿Te atrae la idea de diseñar y crear objetos funcionales y atractivos?'),
+    ('¿Eres empático y te interesa ayudar a las personas a resolver sus problemas?'),
+    ('¿Te gustaría trabajar en el cuidado y promoción de la salud y el bienestar?'),
+    ('¿Tienes habilidades para el análisis y la toma de decisiones en contextos empresariales?'),
+    ('¿Te atrae la idea de diseñar espacios y ambientes que sean funcionales y atractivos?'),
+    ('¿Eres apasionado por conocer y analizar el pasado histórico?'),
+    ('¿Te interesa contribuir al cuidado y preservación del medio ambiente?'),
+    ('¿Te atrae la idea de trabajar con animales y cuidar de su bienestar?'),
+    ('¿Eres curioso sobre cómo se aprende y se enseña en diferentes contextos?'),
+    ('¿Te gustaría explorar el mundo de la gastronomía y la preparación de alimentos?'),
+    ('¿Sientes interés por el análisis de sistemas políticos y de gobierno?'),
+    ('¿Eres atraído por la expresión artística y la creación visual?'),
+    ('¿Tienes curiosidad acerca de cómo funcionan los sistemas informáticos y tecnológicos?'),
+    ('¿Te gustaría contribuir a la justicia y la resolución de conflictos legales?'),
+    ('¿Eres apasionado por explorar las motivaciones y el comportamiento humano?'),
+    ('¿Te atrae la idea de diseñar productos y objetos innovadores?'),
+    ('¿Tienes interés en el análisis de datos y el estudio de tendencias económicas?'),
+    ('¿Te gustaría contribuir al diseño y construcción de espacios urbanos?'),
+    ('¿Eres apasionado por la exploración y el análisis histórico?'),
+    ('¿Te interesa trabajar en el campo de los medios de comunicación?'),
+    ('¿Tienes curiosidad acerca de los aspectos legales y la justicia?'),
+    ('¿Te atrae la idea de trabajar en la creación y diseño visual?'),
+    ('¿Eres apasionado por la gestión de recursos humanos y la colaboración en equipos?'),
+    ('¿Te interesa explorar la intersección entre la tecnología y los negocios?'),
+    ('¿Te gustaría trabajar en el cuidado de la salud y el bienestar de las personas?'),
+    ('¿Tienes habilidades para el análisis financiero y la planificación económica?'),
+    ('¿Te atrae la idea de contribuir al diseño y desarrollo de tecnologías?'),
+    ('¿Eres empático y te gustaría ayudar a las personas con sus desafíos psicológicos?'),
+    ('¿Te interesa explorar los sistemas políticos y su influencia en la sociedad?'),
+    ('¿Tienes habilidades para el análisis de datos y tendencias en los mercados?'),
+    ('¿Te atrae la idea de trabajar en la investigación y análisis social?'),
+    ('¿Eres apasionado por la creación artística y la expresión visual?'),
+    ('¿Te gustaría explorar el mundo de la comunicación y los medios?'),
+    ('¿Tienes interés en la gestión de recursos naturales y el medio ambiente?'),
+    ('¿Te atrae la idea de trabajar con tecnologías médicas y de rehabilitación?'),
+    ('¿Eres curioso acerca de cómo funcionan los sistemas informáticos y tecnológicos?'),
+    ('¿Te gustaría explorar el mundo de la política y la administración pública?'),
+    ('¿Eres apasionado por la enseñanza y la transmisión de conocimientos?'),
+    ('¿Te atrae la idea de trabajar en la investigación científica y tecnológica?'),
+    ('¿Eres curioso acerca de la mente humana y su funcionamiento?'),
+    ('¿Te gustaría explorar el mundo de la gastronomía y la creación de alimentos?'),
+    ('¿Eres apasionado por conocer y analizar el pasado histórico?'),
+    ('¿Te interesa contribuir al cuidado y preservación del medio ambiente?'),
+    ('¿Eres curioso sobre cómo se aprende y se enseña en diferentes contextos?'),
+    ('¿Te atrae la idea de trabajar con animales y cuidar de su bienestar?'),
+    ('¿Eres curioso acerca de cómo funcionan los sistemas económicos y de negocios?'),
+    ('¿Te interesa el análisis de sistemas políticos y su impacto en la sociedad?');
+
+
+
+
+//RELACION PREGUNTA CARRERA//
+INSERT INTO public.preguntas_carreras ("PreguntaID", "CarreraID") VALUES
+    (1, 4), (1, 9), (1, 61),
+    (2, 1), (2, 5), (2, 57),
+    (3, 22), (3, 23), (3, 24), (3, 25), (3, 26), (3, 56),
+    (4, 11), (4, 14), (4, 17), (4, 18),
+    (5, 2), (5, 69),
+    (6, 41), (6, 42), (6, 43), (6, 44), (6, 45), (6, 46), (6, 47), (6, 48), (6, 49),
+    (7, 21), (7, 22), (7, 23), (7, 24), (7, 25), (7, 26), (7, 27), (7, 29), (7, 56),
+    (8, 12), (8, 17),
+    (9, 10), (9, 20),
+    (10, 55), (10, 66), (10, 70),
+    (11, 62), (11, 72), (11, 75),
+    (12, 59), (12, 63),
+    (13, 50), (13, 71), (13, 76),
+    (14, 9), (14, 51),
+    (15, 15), (15, 16), (15, 20),
+    (16, 30), (16, 31), (16, 32), (16, 34), (16, 35), (16, 38),
+    (17, 3),
+    (18, 2), (18, 7), (18,69),
+    (19, 11), (19, 14),
+    (20, 25), (20, 26),
+    (21, 12), (21, 54),
+    (22, 10), (22, 20),
+    (23, 1),(23, 5),(23, 57),
+    (24, 3),
+    (25, 11), (25, 15), (25, 16),
+    (26, 27),
+    (27, 21), (27, 30), (21,60),
+    (28, 41), (28, 42), (28, 43),(28, 44),(28, 45),(28, 46),(28, 47),(28,48),(28, 49),
+    (29, 22), (29, 25), (29, 26),
+    (30, 30), (30, 31),(30, 32),(30, 33),(30, 34),(30, 35),(30, 38),(30, 39),(30, 40),
+    (31, 2), (31, 69), 
+    (32, 9), (32, 51), 
+    (33, 22), (33, 23),(33,34),(33,25),(33,26),(33,56),
+    (34, 4), (34, 7),
+    (35, 16), (35, 20),
+    (36, 1), (36, 5),(36, 57),
+    (37, 55), (37, 66),
+    (38, 45), (38, 46), (38, 47),(38, 48),(38,49),
+    (39, 31), (39, 31),(39,33),(39,34),(39,35),(39,38),(39,39),(39,40),
+    (40, 9), (40, 51),
+    (41, 59), (41, 63),
+    (42, 31), (42, 32),(42,33),(42,34),(42,35),(42,38),(42,39),(42,40),
+	(43, 2), (43, 69),
+    (44, 50), (44, 71), (44,76),
+    (45, 10), (45, 20),
+    (46, 55), (46, 66),(46,70),
+    (47, 59), (47, 63),
+    (48, 62), (48, 72),(48,75),
+    (49, 22), (49, 23),(49,24),(49,25),(45,26),(49,56),
+    (50, 9), (50, 51);
+
+
+FALTAN PREGUNTAS PARA LAS CARRERAS CON EL ID
+6
+8
+13
+18
+19
+28
+29
+36
+37
+52
+53
+54
+58
+60
+61
+64
+65
+67
+68
+73
+74
