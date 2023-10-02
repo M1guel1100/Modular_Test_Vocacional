@@ -76,7 +76,7 @@ $(document).ready(function() {
         });
 }
     $('#resetButton').off('click').on('click', function() {
-        location.reload();
+        reiniciarAPI();
     });
     
     // Detectar cuando la página se recarga o se cierra
